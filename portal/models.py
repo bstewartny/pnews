@@ -57,7 +57,7 @@ class Document(models.Model):
     url=models.CharField(max_length=500)
     entities=models.ManyToManyField(Entity)     
     feed=models.ForeignKey(Feed)
-
+    
     search_index=VectorField()
     objects=SearchManager(
             fields=('title','body'),

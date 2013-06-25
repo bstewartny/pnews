@@ -6,4 +6,6 @@ pom.xml
 *.pyc
 *.db
 *.pid
+*.swp
+
 

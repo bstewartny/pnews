@@ -1,4 +1,7 @@
 from celery import task
+from celery.task.base import periodic_task
+from django.utils.timezone import timedelta
+
 from portal.models import *
 import time
 import datetime
@@ -10,6 +13,37 @@ import portal.nlpextractor
 import feedparser
 from portal.cleaner import clean_text
 import feeddefs
+
+
+
+def dedup():
+    c=0
+    print 'dedup'
+    for d in Document.objects.all():
+        print d.title
+        c=c+1
+        if c % 1000 == 0:
+            print 'processed '+str(c)+' docs...'
+        dups=get_duplicates(d)
+        for dup in dups:
+            print 'removing duplicate...'
+            dup.delete()
+
+        
+
+def get_duplicates(doc):
+    return Document.objects.filter(feed=doc.feed).filter(title=doc.title).exclude(id=doc.id)
+
+def is_duplicate(doc):
+    # dup if same feed, same headline
+    if Document.objects.filter(feed=doc.feed).filter(title=doc.title).exclude(id=doc.id).count()>0:
+        return True
+
+    #if Document.objects.filter(feed=doc.feed).filter(url=d.url).count()>0:
+    #    return True
+    
+    return False
+
 
 @task()
 def process_doc(doc):
@@ -24,6 +58,10 @@ def process_doc(doc):
         text=text+' '+doc.body
     else:
         doc.body=''
+
+    if is_duplicate(doc):
+        print 'duplicate doc, skipping...'
+        return
 
     # save doc
     doc.save()
@@ -78,7 +116,12 @@ def process_feed(feed):
 def process_feeds():
     print 'process_feeds'
     for feed in Feed.objects.all():
-        process_feed(feed)
+        process_feed.delay(feed)
+
+@periodic_task(run_every=timedelta(seconds=5))
+def process_feeds_periodic():
+    print 'process_feeds_periodic'
+    process_feeds()
 
 def load_feeds():
     for feed in feeddefs.feeds:
