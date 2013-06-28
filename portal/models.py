@@ -2,12 +2,31 @@ from djorm_pgfulltext.models import SearchManager
 from djorm_pgfulltext.fields import VectorField
 from django.db import models
 from portal.highlighter import Highlighter
+from django.utils.text import slugify
 
-# Create your models here.
+class EntityType(models.Model):
+    name=models.CharField(max_length=200)
+    enabled=models.BooleanField(default=True)
+
+    def num_entities(self):
+        return Entity.objects.filter(entity_type=self).count()
+
+
+class Cluster(models.Model):
+    modified_date=models.DateTimeField(auto_now=True)
+     
 class Entity(models.Model):
     name=models.CharField(max_length=200)
+    entity_type=models.ForeignKey(EntityType,null=True,blank=True,default=None)
     modified_date=models.DateTimeField(auto_now=True)
     enabled=models.BooleanField(default=True)
+    slug=models.SlugField()
+
+    def save(self,*args,**kwargs):
+        if not self.id:
+            # TODO: we might need to force self.name to be unicode here...
+            self.slug=slugify(unicode(self.name))
+        super(Entity,self).save(*args,**kwargs)
 
     def num_docs(self):
         return Document.objects.filter(entities=self).count()
@@ -57,7 +76,8 @@ class Document(models.Model):
     url=models.CharField(max_length=500)
     entities=models.ManyToManyField(Entity)     
     feed=models.ForeignKey(Feed)
-    
+    cluster=models.ForeignKey(Cluster,null=True,blank=True)
+
     search_index=VectorField()
     objects=SearchManager(
             fields=('title','body'),

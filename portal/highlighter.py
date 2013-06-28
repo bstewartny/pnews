@@ -1,14 +1,19 @@
 from portal.models import *
+import re
 
 class Highlighter:
 
     @staticmethod
     def highlight_text(text,query=None,entities=[],start_tag='<b>',end_tag='</b>'):
-        words=Highlighter.get_highlight_words(query,entities)    
+        patterns=Highlighter.get_highlight_patterns(query,entities)    
         text=' '+text+' '
-        for word in words:
-            text=Highlighter.highlight_word(text,word,start_tag,end_tag)
+        for pattern in patterns:
+            text=Highlighter.highlight_re(text,pattern,start_tag,end_tag)
         return text.strip()
+
+    @staticmethod
+    def get_highlight_patterns(query,entities=[]):
+        return [Highlighter.get_word_pattern(word) for word in Highlighter.get_highlight_words(query,entities)]
 
     @staticmethod    
     def get_highlight_words(query,entities=[]):
@@ -22,18 +27,25 @@ class Highlighter:
                         entity=Entity.objects.get(id=entity)
                     if entity is not None:
                         words.append(entity.name)
-                    for pattern in words.pattern_set.all():
+                    for pattern in entity.pattern_set.all():
                         words.append(pattern.pattern)
                 except:
                     pass
         # TODO: deduplicate words, and sort by word length in desc order
-        return set(words)
+        return sorted(set(words),key=len,reverse=True)
    
+    @staticmethod
+    def highlight_re(text,pattern,start_tag='<b>',end_tag='</b>'):
+        return pattern.sub(start_tag+"\\1"+end_tag,text)
+    
+    @staticmethod
+    def get_word_pattern(text):
+        return re.compile('('+text+')',re.IGNORECASE)
+    
     @staticmethod    
     def highlight_word(text,word,start_tag='<b>',end_tag='</b>'):
-        # TODO: handle other non-word seperators (period, comma, quote, etc.)
-        # TODO: optimize by checking text length vs. word length and maybe check if word exists in text first...
-        return text.replace(' '+word+' ',' '+start_tag+word+end_tag+' ')
+        print 'highlight_word: word='+word+', text='+text
+        return Highlighter.highlight_re(text,Highlighter.get_word_pattern(text),start_tag,end_tag)
 
 
         

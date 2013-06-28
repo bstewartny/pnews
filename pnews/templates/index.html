@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Search</title>
+    <title>{{title}}</title>
     
     <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
     <!--[if lt IE 9]>
@@ -106,7 +106,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#">Political News</a>
+          <a class="brand" href="#"></a>
           <div class="nav-collapse">
             <ul class="nav">
               <li class="active"><a href="/">Home</a></li>
@@ -144,13 +144,13 @@
             <ul class="nav nav-list">
               <li class="nav-header">Popular Topics</li>
                 {% for facet in facets.entities%}   
-                  <li><a class="title" href="/topic/{{facet.id}}">{{facet.name}}</a></li>
+                <li><a class="title" href="{{facetpath}}{{facet.slug}}{{facetquery}}">{{facet.name}}</a></li>
                 {% endfor %}
             </ul>
             <ul class="nav nav-list">
               <li class="nav-header">Popular Sources</li>
-                {% for facet in facets.source%}   
-                  <li><a class="title" href="/source/{{facet.id}}">{{facet.source}}</a></li>
+                {% for facet in facets.sources%}   
+                <li><a class="title" href="{{facetpath}}{{facet.slug}}{{facetquery}}">{{facet.source}}</a></li>
                 {% endfor %}
             </ul>
           </div> 
@@ -164,14 +164,16 @@
                     {% endfor %}
                     </div>
               </div>
-            <div class="span12">
+              <div class="span12">
+                  {% autoescape off %}
               {% for result in results %}
                   <h3><a class="title" href="{{result.url}}">{{ result.title }}</a></h3>
                   <blockquote>
                     <p>{{result.body}}</p>
-                    <small>{{result.source}}</small>
+                    <small>{{result.feed.name}}</small>
                    </blockquote>
-              {% endfor %}
+                   {% endfor %}
+                   {% endautoescape %}
             </div>
           </div>
         </div>

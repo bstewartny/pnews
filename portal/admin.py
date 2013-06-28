@@ -1,5 +1,6 @@
 from django.contrib import admin
 from portal.models import *
+from portal.tasks import process_entity
 
 """
 TODO:
@@ -140,16 +141,30 @@ def merge_entities(modeladmin,request,queryset):
 
 merge_entities.short_description="Merge selected entities"
 
+def process_entities(modeladmin,request,queryset):
+
+    # TODO: how to take the one to merge to?
+    # we can just take first one in list, or we can take shortest/longest name?
+    for entity in queryset:
+        process_entity.delay(entity.id)
+
+process_entities.short_description="Process selected entities"
+
 class PatternInline(admin.TabularInline):
     model=Pattern
     extra=3
 
 class EntityAdmin(admin.ModelAdmin):
     search_fields=['name']
-    list_display=('name','enabled','modified_date','num_docs')
-    list_filter=['enabled','modified_date']
+    list_display=('name','enabled','entity_type','modified_date','num_docs')
+    list_filter=['enabled','modified_date','entity_type']
     inlines=[PatternInline]
-    actions=[enable_entities,disable_entities,merge_entities]
+    actions=[enable_entities,disable_entities,merge_entities,process_entities]
+
+class EntityTypeAdmin(admin.ModelAdmin):
+    search_fields=['name']
+    list_display=('name','enabled','num_entities')
+    list_filter=['enabled']
 
 class PatternAdmin(admin.ModelAdmin):
     search_fields=['pattern']
@@ -170,6 +185,7 @@ class DocumentAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Entity,EntityAdmin)
+admin.site.register(EntityType,EntityTypeAdmin)
 admin.site.register(Pattern,PatternAdmin)
 admin.site.register(Feed,FeedAdmin)
 admin.site.register(Document,DocumentAdmin)

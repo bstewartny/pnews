@@ -7,5 +7,7 @@ pom.xml
 *.db
 *.pid
 *.swp
+*.log
+
 
 
