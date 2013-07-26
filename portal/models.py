@@ -85,10 +85,15 @@ class Document(models.Model):
             search_field='search_index',
             auto_update_search_field=True
             )
-   
+  
+    def content(self):
+        text=self.title
+        if self.body:
+            text=text+' \n\n'+self.body
+        return text
+
     def highlighted(self):
-        text=self.title+' \n'+self.body
-        return Highlighter.highlight_text(text,None,self.entities.all())
+        return Highlighter.highlight_text(self.content(),None,self.entities.all())
 
     def num_entities(self):
         return self.entities.count()
