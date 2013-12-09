@@ -38,6 +38,16 @@ def matches_entity(text,entity):
             return True
     return False
 
+def text2tree(text):
+    chunks=nltk.ne_chunk(ntlk.pos_tag(nltk.word_tokenize(text)),binary=True) # binary only enables one type 'NE'
+    return chunks
+
+def chunk2entity(chunk):
+    return ' '.join(leaf[0] for leaf in chunk.leaves())
+
+def tree2entities(tree):
+    return {chunk2entity(chunk) for chunk in tree if hasattr(chunk,'node')}
+
 def get_entities(text):
     found=[]
     for entity in entities.whitelist:
