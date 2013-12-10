@@ -46,7 +46,7 @@ def chunk2entity(chunk):
     return ' '.join(leaf[0] for leaf in chunk.leaves())
 
 def tree2entities(tree):
-    return {chunk2entity(chunk) for chunk in tree if hasattr(chunk,'node')}
+    return [chunk2entity(chunk) for chunk in tree if hasattr(chunk,'node')]
 
 def get_entities(text):
     found=[]

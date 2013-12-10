@@ -1,8 +1,8 @@
 # Django settings for pnews project.
 import os
-import djcelery
+#import djcelery
 
-djcelery.setup_loader()
+#djcelery.setup_loader()
 
 CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
 
@@ -19,12 +19,12 @@ DATABASES = {
     'default': {
         #'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'django_pnews', #'/Users/bstewart/pnews/sqlite3.db',                      # Or path to database file if using sqlite3.
+        'NAME': 'pnews', #'/Users/bstewart/pnews/sqlite3.db',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
-        'USER': 'django',
-        'PASSWORD': 'django',
-        'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '',                      # Set to empty string for default.
+        'USER': 'sa',
+        'PASSWORD': 'Django1234',
+        'HOST': 'djangopnews.c3qcqhxf6f6r.us-east-1.rds.amazonaws.com',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+        'PORT': '5432',                      # Set to empty string for default.
     }
 }
 
@@ -135,8 +135,8 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-    'portal',
-    'djcelery'
+    'portal'
+    #'djcelery'
 )
 
 # A sample logging configuration. The only tangible logging

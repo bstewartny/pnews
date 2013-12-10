@@ -132,7 +132,8 @@ def process_entity(id):
 def process_feeds():
     print 'process_feeds'
     for feed in Feed.objects.all():
-        process_feed.delay(feed)
+        #process_feed.delay(feed)
+        process_feed(feed)
 
 #@periodic_task(run_every=timedelta(seconds=5))
 
