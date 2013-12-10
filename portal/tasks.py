@@ -85,7 +85,7 @@ def process_doc(doc):
             doc.entities.add(e)
 
     # get entities using database models
-    entities=portal.tagger.extract_entities(text)
+    entities=Tagger.extract_entities(text)
 
     if entities is not None:
         if len(entities)>0:
