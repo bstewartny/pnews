@@ -61,7 +61,7 @@ def process_doc(doc):
     if is_duplicate(doc):
         return
 
-    print 'process_doc: '+doc.title
+    #print 'process_doc: '+doc.title
     
     # save doc
     doc.save()
@@ -119,8 +119,11 @@ def process_feed(feed):
         doc=Document(title=title,url=url,body=body,feed=feed)
         #TODO: get pub_date from rss item
         # doc.pub_date=''
-        process_doc(doc)
-
+        try:
+		process_doc(doc)
+	except:
+		print 'Failed to process doc...'
+		continue
 @task()
 def process_entity(id):
     e=Entity.objects.get(id=id)

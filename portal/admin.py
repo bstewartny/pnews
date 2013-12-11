@@ -146,7 +146,7 @@ def process_entities(modeladmin,request,queryset):
     # TODO: how to take the one to merge to?
     # we can just take first one in list, or we can take shortest/longest name?
     for entity in queryset:
-        process_entity.delay(entity.id)
+        process_entity(entity.id)
 
 process_entities.short_description="Process selected entities"
 
