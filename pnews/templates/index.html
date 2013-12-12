@@ -111,7 +111,6 @@
             <ul class="nav">
               <li class="active"><a href="/">Home</a></li>
               <li><a href="/topics">Topics</a></li>
-              <li><a href="/sources">Sources</a></li>
             </ul>
             <form method="get" action="" class="navbar-search pull-right">
               <input id="q" size="50" name="q" value="{{query}}" type="text" class="search-query" placeholder="Search">
@@ -145,12 +144,6 @@
               <li class="nav-header">Popular Topics</li>
                 {% for facet in facets.entities%}   
                 <li><a class="title" href="{{facetpath}}{{facet.slug}}{{facetquery}}">{{facet.name}}</a></li>
-                {% endfor %}
-            </ul>
-            <ul class="nav nav-list">
-              <li class="nav-header">Popular Sources</li>
-                {% for facet in facets.sources%}   
-                <li><a class="title" href="{{facetpath}}{{facet.slug}}{{facetquery}}">{{facet.source}}</a></li>
                 {% endfor %}
             </ul>
           </div> 

@@ -24,13 +24,22 @@ def topics(request):
     # show results grouped by entity/topic, a result set for each one...
     # first get top N entities for the text search
     # for each entity do another sub-query
-    pass
+    
+    text_query=request.REQUEST.get('q')
+    if text_query is not None:
+        if len(text_query)==0:
+            text_query=None
+    entity_list=[] 
+    results=Index.topics(text_query,page_size=5,num_topics=12)
+     
+    return render(request,'topics.html',{'topics':results}) 
 
 def sources(request):
     # show results grouped by entity/topic, a result set for each one...
     # first get top N entities for the text search
     # for each entity do another sub-query
-    pass
+    results={}
+    return render(request,'sources.html',results) 
 
 
 def get_breadcrumbs(entity_list,query):

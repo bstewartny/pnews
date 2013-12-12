@@ -8,6 +8,8 @@ pom.xml
 *.pid
 *.swp
 *.log
+/log
+log
 
 
 

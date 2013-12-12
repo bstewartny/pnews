@@ -8,7 +8,7 @@ class Index:
 
     @staticmethod
     def get_field_facets(results_filter,field_name,field_objects,top=10):
-        facets=results_filter.filter(**{'{0}__isnull'.format(field_name):False}).values(field_name).annotate(freq=Count(field_name)).order_by('-freq')[:top]
+        facets=results_filter.filter(**{'{0}__isnull'.format(field_name):False,'{0}__enabled'.format(field_name):True}).values(field_name).annotate(freq=Count(field_name)).order_by('-freq')[:top]
         for facet in facets:
             e=field_objects.get(id=facet[field_name])
             facet['name']=e.name
@@ -47,6 +47,29 @@ class Index:
             for doc in docs:
                 h[doc.id]=Index.get_doc_highlights(doc,patterns,start_tag,end_tag)
         return h
+
+    @staticmethod
+    def topics(text,page_size=10,sort='-pub_date',num_topics=16):
+        if page_size<0:
+            page_size=0
+        if sort is None:
+            sort='-pub_date'
+
+        results=None
+        if text is None or text=="*":
+            text=None
+            results=Document.objects.all()
+        else:
+            results=Document.objects.search(text)
+        
+        facets=Index.get_results_facets(results,num_topics)
+        topics=[]
+        for facet in facets['entities']:
+            name=facet['name']
+            slug=facet['slug']
+            print str(facet)
+            topics.append({'name':name,'slug':slug,'results':results.filter(entities=facet['entities']).order_by(sort)[:page_size]})
+        return topics
 
 
     @staticmethod    
