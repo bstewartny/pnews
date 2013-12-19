@@ -75,6 +75,15 @@ def index(request):
     
     results=Index.search(text_query,entity_list,page_number=page_number,facet_max=facet_max,highlight=True,highlight_inline=True,start_tag="<span style='background:yellow'>",end_tag='</span>')
 
+    for result in results['results']:
+        if result.entities.filter(name='LeftWing').exists():
+            result.wing='left'
+        else:
+            if result.entities.filter(name='RightWing').exists():
+                result.wing='right'
+            else:
+                result.wing='none'
+
     # adjust facet links to be relative to current path
     facetpath=request.path
     if not facetpath.endswith('/'):
