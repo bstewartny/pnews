@@ -8,6 +8,9 @@ import nltk
 # Create your views here.
 
 stopwords=nltk.corpus.stopwords.words('english')
+stopwords.append('yellow')
+stopwords.append('span')
+
 
 def get_entity_list(request):
     # get from request URL (find entity slugs in path)
@@ -65,6 +68,7 @@ def index(request):
         if len(text_query)==0:
             text_query=None
 
+    print 'get entity list'
     entity_list=get_entity_list(request)
     if text_query is None and len(entity_list)==0:
         text_query='*'
@@ -73,8 +77,10 @@ def index(request):
     page_size=20
     facet_max=25
     
-    results=Index.search(text_query,entity_list,page_number=page_number,facet_max=facet_max,highlight=True,highlight_inline=True,start_tag="<span style='background:yellow'>",end_tag='</span>')
 
+    print 'get results'
+    results=Index.search(text_query,entity_list,page_number=page_number,facet_max=facet_max,highlight=True,highlight_inline=True,start_tag="<span style='background:yellow'>",end_tag='</span>')
+    print 'got results'
     for result in results['results']:
         if result.entities.filter(name='LeftWing').exists():
             result.wing='left'
@@ -101,6 +107,7 @@ def index(request):
 
     all_titles=''
 
+    print 'get word cloud'
     for doc in results['results']:
         all_titles=all_titles+' '+doc.title
         
@@ -115,5 +122,6 @@ def index(request):
     results['title']=title
     results['tagcloud']=tagcloud
 
+    print 'render'
     return render(request,'index.html',results) 
 

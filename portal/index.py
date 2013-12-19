@@ -106,8 +106,12 @@ class Index:
                         results=results.filter(entities=entities[i])
 
         if results:
+            print 'get results facets'
             facets=Index.get_results_facets(results,facet_max)
+            print 'got facets'
+            print 'get docs'
             docs=results.order_by(sort)[start:end]
+            print 'get highlights'
             highlights={}
             if docs.count()>0:
                 if highlight:
