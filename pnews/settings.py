@@ -4,7 +4,7 @@ import os
 
 #djcelery.setup_loader()
 
-CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
+#CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -21,9 +21,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'pnews', #'/Users/bstewart/pnews/sqlite3.db',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
-        'USER': 'sa',
-        'PASSWORD': 'Django1234',
-        'HOST': 'djangopnews.c3qcqhxf6f6r.us-east-1.rds.amazonaws.com',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        #'HOST': 'djangopnews.c3qcqhxf6f6r.us-east-1.rds.amazonaws.com',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '5432',                      # Set to empty string for default.
     }
 }
@@ -119,7 +119,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    os.path.realpath(os.path.dirname(__file__))+'/templates/'
+    os.path.realpath(os.path.dirname(__file__))+'/templates/',
     )
 
 print TEMPLATE_DIRS

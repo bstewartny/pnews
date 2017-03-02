@@ -120,7 +120,8 @@ def get_entities3(text):
   sentences = nltk.sent_tokenize(text)
   tokenized_sentences = [nltk.word_tokenize(sentence) for sentence in sentences]
   tagged_sentences = [nltk.pos_tag(sentence) for sentence in tokenized_sentences]
-  chunked_sentences = nltk.batch_ne_chunk(tagged_sentences, binary=True)
+  #chunked_sentences = nltk.batch_ne_chunk(tagged_sentences, binary=True)
+  chunked_sentences = nltk.ne_chunk_sents(tagged_sentences, binary=True)
   
   entity_names=[]
   for tree in chunked_sentences:

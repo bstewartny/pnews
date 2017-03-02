@@ -13,7 +13,7 @@ def extract_entity_names(t):
       else:
           for child in t:
               entity_names.extend(extract_entity_names(child))
-              
+  print 'found '+str(len(entity_names))+' entities...'           
   return entity_names
 
 
@@ -50,13 +50,16 @@ def filter_entities(a):
   return a
 
 def extract_entities(text):
+  print 'extract_entities...'
   sentences = nltk.sent_tokenize(text)
   tokenized_sentences = [nltk.word_tokenize(sentence) for sentence in sentences]
   tagged_sentences = [nltk.pos_tag(sentence) for sentence in tokenized_sentences]
-  chunked_sentences = nltk.batch_ne_chunk(tagged_sentences, binary=True)
+  #chunked_sentences = nltk.batch_ne_chunk(tagged_sentences, binary=True)
+  chunked_sentences = nltk.ne_chunk_sents(tagged_sentences, binary=True)
   
   entity_names=[]
   for tree in chunked_sentences:
+    print 'process sentence...'
     entity_names.extend(extract_entity_names(tree))
 
   return filter_entities(entity_names)
