@@ -7,8 +7,11 @@ invalid_entities=['tweet text',
 
 def extract_entity_names(t):
   entity_names = []
-  if hasattr(t, 'node') and t.node:
-      if t.node == 'NE':
+  print 'tree: '+str(t)
+  if hasattr(t,'label'):
+  #if hasattr(t, 'node') and t.node:
+      print 't.label='+t.label()
+      if t.label() == 'NE':
           entity_names.append(' '.join([child[0] for child in t]))
       else:
           for child in t:
