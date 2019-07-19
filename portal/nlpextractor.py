@@ -7,16 +7,16 @@ invalid_entities=['tweet text',
 
 def extract_entity_names(t):
   entity_names = []
-  print 'tree: '+str(t)
+  #print 'tree: '+str(t)
   if hasattr(t,'label'):
   #if hasattr(t, 'node') and t.node:
-      print 't.label='+t.label()
+      #print 't.label='+t.label()
       if t.label() == 'NE':
           entity_names.append(' '.join([child[0] for child in t]))
       else:
           for child in t:
               entity_names.extend(extract_entity_names(child))
-  print 'found '+str(len(entity_names))+' entities...'           
+  #print 'found '+str(len(entity_names))+' entities...'           
   return entity_names
 
 
@@ -62,7 +62,7 @@ def extract_entities(text):
   
   entity_names=[]
   for tree in chunked_sentences:
-    print 'process sentence...'
+    #print 'process sentence...'
     entity_names.extend(extract_entity_names(tree))
 
   return filter_entities(entity_names)

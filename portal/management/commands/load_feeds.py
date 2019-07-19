@@ -7,6 +7,7 @@ class Command(NoArgsCommand):
 	help='Process feeds'
 	def handle_noargs(self,**options):
 		print 'start loading feeds...'
-		load_feeds()
+		Feed.objects.all().delete()
+                load_feeds()
 		print 'loading feeds done.'	
 
