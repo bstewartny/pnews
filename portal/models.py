@@ -41,7 +41,7 @@ class Entity(models.Model):
                     if not p.pattern in a:
                         a.append(p.pattern)
         for p in a:
-            self.pattern_set.add(Pattern(pattern=p,entity=self))
+            self.pattern_set.add(Pattern(pattern=p,entity=self),bulk=False)
         self.save()
        
         # update all documents which have other entities to use this entity instead...
@@ -53,7 +53,7 @@ class Entity(models.Model):
         for other in others:
             other.delete()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -65,7 +65,7 @@ class Feed(models.Model):
     def num_docs(self):
         return Document.objects.filter(feed=self).count()
     
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 class Document(models.Model):
@@ -98,21 +98,21 @@ class Document(models.Model):
     def num_entities(self):
         return self.entities.count()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
 class Pattern(models.Model):
     entity=models.ForeignKey(Entity)
     pattern=models.CharField(max_length=200)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.pattern
 
 class Bundle(models.Model):
     user=models.CharField(max_length=200)
     name=models.CharField(max_length=200)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 class BundleDoc(models.Model):

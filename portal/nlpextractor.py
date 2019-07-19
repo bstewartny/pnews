@@ -46,7 +46,8 @@ def filter_entities(a):
   a=[s for s in a if len(s.split())<3]
   # remove any entities that are all CAPS
   a=[s for s in a if not all_caps(s)]
-  a.sort(lambda x,y:cmp(len(y),len(x)))
+  #a.sort(lambda x,y:cmp(len(y),len(x)))
+  a.sort(key=lambda x:len(x))
   a=[x for x in a if not has_substr(x,a)]
   a=[s for s in a if not s.lower() in invalid_entities]
   

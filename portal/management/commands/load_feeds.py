@@ -1,11 +1,11 @@
-from django.core.management.base import NoArgsCommand, CommandError
+from django.core.management.base import BaseCommand, CommandError
 
 from portal.models import *
 from portal.tasks import *
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     help='Process feeds'
-    def handle_noargs(self,**options):
+    def handle(self,*args,**options):
         print('start loading feeds...')
         Feed.objects.all().delete()
         load_feeds()
