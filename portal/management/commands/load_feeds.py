@@ -4,10 +4,10 @@ from portal.models import *
 from portal.tasks import *
 
 class Command(NoArgsCommand):
-	help='Process feeds'
-	def handle_noargs(self,**options):
-		print 'start loading feeds...'
-		Feed.objects.all().delete()
-                load_feeds()
-		print 'loading feeds done.'	
+    help='Process feeds'
+    def handle_noargs(self,**options):
+        print('start loading feeds...')
+        Feed.objects.all().delete()
+        load_feeds()
+        print('loading feeds done.')	
 

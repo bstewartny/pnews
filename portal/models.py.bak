@@ -25,7 +25,7 @@ class Entity(models.Model):
     def save(self,*args,**kwargs):
         if not self.id:
             # TODO: we might need to force self.name to be unicode here...
-            self.slug=slugify(str(self.name))
+            self.slug=slugify(unicode(self.name))
         super(Entity,self).save(*args,**kwargs)
 
     def num_docs(self):

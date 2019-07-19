@@ -6,7 +6,7 @@ from portal.tasks import *
 class Command(NoArgsCommand):
 	help='Process feeds'
 	def handle_noargs(self,**options):
-		print('start processing feeds...')
+		print 'start processing feeds...'
 		process_feeds()
-		print('processing feeds done.')	
+		print 'processing feeds done.'	
 

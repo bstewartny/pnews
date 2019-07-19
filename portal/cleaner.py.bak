@@ -1,5 +1,5 @@
 import nltk
-from bs4 import BeautifulSoup
+from BeautifulSoup import BeautifulSoup
 import re
 
 max_summary_len=400
@@ -45,7 +45,7 @@ def is_clean_sentence(sent):
   if not sent[-1]=='.':
     return False
   words=nltk.word_tokenize(sent)
-  num_clean_words=len(list(filter(is_clean_word,words)))
+  num_clean_words=len(filter(is_clean_word,words))
   if num_clean_words < min_clean_words:
     return False
   if float(num_clean_words) / float(len(words)) < min_clean_words_ratio:
@@ -61,7 +61,7 @@ def clean_summary(summary):
   clean_sentences=[]
   total_len=0
   summary=summary.replace('&apos;','\'')
-  for sentence in filter(is_clean_sentence,list(map(clean_sentence,nltk.sent_tokenize(summary)))):
+  for sentence in filter(is_clean_sentence,map(clean_sentence,nltk.sent_tokenize(summary))):
     if total_len+len(sentence) > max_summary_len and len(clean_sentences)>0:
       return ' '.join(clean_sentences)
     else:
@@ -82,6 +82,6 @@ def strip_html_tags(html):
     text="".join(BeautifulSoup(html,convertEntities=BeautifulSoup.HTML_ENTITIES).findAll(text=True))
     return text
   except:
-    print('Failed to strip html tags...')
+    print 'Failed to strip html tags...'
     return html
 

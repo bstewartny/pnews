@@ -59,7 +59,7 @@ class Tagger:
     @staticmethod
     def process_entity(entity):
         tagged=Document.objects.filter(entities=entity)
-        print('found '+str(tagged.count())+' tagged documents')
+        print 'found '+str(tagged.count())+' tagged documents'
         # remove existing tags
         # TODO: can we do single bulk update/delete statement here?
         for doc in tagged:
@@ -70,7 +70,7 @@ class Tagger:
         
         candidates=Tagger.get_candidate_documents(patterns)
        
-        print('found '+str(len(set(candidates)))+' candidate documents')
+        print 'found '+str(len(set(candidates)))+' candidate documents'
         
         candidates.extend(tagged)
 
@@ -86,6 +86,6 @@ class Tagger:
                 candidate.entities.add(entity)
                 candidate.save()
                 count=count+1
-        print('tagged '+str(count)+' documents with '+entity.name)
+        print 'tagged '+str(count)+' documents with '+entity.name
 
 

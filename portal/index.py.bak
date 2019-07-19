@@ -67,7 +67,7 @@ class Index:
         for facet in facets['entities']:
             name=facet['name']
             slug=facet['slug']
-            print(str(facet))
+            print str(facet)
             topics.append({'name':name,'slug':slug,'results':results.filter(entities=facet['entities']).order_by(sort)[:page_size]})
         return topics
 
@@ -77,7 +77,7 @@ class Index:
         
         if page_number<1: 
             page_number=1
-            print('feed facets query:')
+            print 'feed facets query:'
         if page_size<0:
             page_size=0
         if sort is None:
@@ -106,12 +106,12 @@ class Index:
                         results=results.filter(entities=entities[i])
 
         if results:
-            print('get results facets')
+            print 'get results facets'
             facets=Index.get_results_facets(results,facet_max)
-            print('got facets')
-            print('get docs')
+            print 'got facets'
+            print 'get docs'
             docs=results.order_by(sort)[start:end]
-            print('get highlights')
+            print 'get highlights'
             highlights={}
             if docs.count()>0:
                 if highlight:

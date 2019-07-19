@@ -28,7 +28,7 @@ def topics(request):
     # first get top N entities for the text search
     # for each entity do another sub-query
     
-    text_query=request.GET.get('q')
+    text_query=request.REQUEST.get('q')
     if text_query is not None:
         if len(text_query)==0:
             text_query=None
@@ -63,24 +63,24 @@ def get_breadcrumbs(entity_list,query):
 
 def index(request):
 
-    text_query=request.GET.get('q')
+    text_query=request.REQUEST.get('q')
     if text_query is not None:
         if len(text_query)==0:
             text_query=None
 
-    print('get entity list')
+    print 'get entity list'
     entity_list=get_entity_list(request)
     if text_query is None and len(entity_list)==0:
         text_query='*'
 
-    page_number=int(request.GET.get('p',1))
+    page_number=int(request.REQUEST.get('p',1))
     page_size=20
     facet_max=25
     
 
-    print('get results')
+    print 'get results'
     results=Index.search(text_query,entity_list,page_number=page_number,facet_max=facet_max,highlight=True,highlight_inline=True,start_tag="<span style='background:yellow'>",end_tag='</span>')
-    print('got results')
+    print 'got results'
     for result in results['results']:
         if result.entities.filter(name='LeftWing').exists():
             result.wing='left'
@@ -107,7 +107,7 @@ def index(request):
 
     all_titles=''
 
-    print('get word cloud')
+    print 'get word cloud'
     for doc in results['results']:
         all_titles=all_titles+' '+doc.title
         
@@ -122,6 +122,6 @@ def index(request):
     results['title']=title
     results['tagcloud']=tagcloud
 
-    print('render')
+    print 'render'
     return render(request,'index.html',results) 
 

@@ -1,10 +1,11 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
+import portal.views
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = [
     # Examples:
     # url(r'^$', 'pnews.views.home', name='home'),
     # url(r'^pnews/', include('pnews.foo.urls')),
@@ -14,7 +15,11 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^topics$','portal.views.topics',name='topics'),
-    url(r'^sources$','portal.views.sources',name='sources'),
-    url(r'^.*$','portal.views.index',name='index')
-)
+    url(r'^topics$',portal.views.topics),
+    url(r'^sources$',portal.views.sources),
+    url(r'^topics/$',portal.views.topics),
+    url(r'^sources/$',portal.views.sources),
+    url(r'^.*$',portal.views.index),
+    url(r'^$',portal.views.index),
+    url(r'^/$',portal.views.index)
+]

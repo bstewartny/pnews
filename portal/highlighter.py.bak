@@ -44,7 +44,7 @@ class Highlighter:
     
     @staticmethod    
     def highlight_word(text,word,start_tag='<b>',end_tag='</b>'):
-        print('highlight_word: word='+word+', text='+text)
+        print 'highlight_word: word='+word+', text='+text
         return Highlighter.highlight_re(text,Highlighter.get_word_pattern(text),start_tag,end_tag)
 
 
