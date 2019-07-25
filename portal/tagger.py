@@ -61,7 +61,7 @@ class Tagger:
     @staticmethod
     def make_pattern_re(pattern):
         # make re to match begin/end of string or any non-word char as boundaries
-        return re.compile('(^|[^\w])'+pattern+'($|[^\w])',re.IGNORECASE)
+        return re.compile('(^|[^\w])'+re.escape(pattern.strip())+'($|[^\w])',re.IGNORECASE)
 
     @staticmethod
     def get_candidate_documents(patterns):
