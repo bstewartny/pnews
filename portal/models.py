@@ -37,10 +37,11 @@ class Entity(models.Model):
 
     def merge(self,others):
         a=[]
-        current_patterns=[p.pattern for p in self.pattern_set.all()]
+        # TODO: deal with disabled patterns here
+        current_patterns=[p.pattern for p in self.pattern_set.filter(enabled=True)]
         for other in others:
             a.append(other.name)
-            for p in other.pattern_set.all():
+            for p in other.pattern_set.all(enabled=True):
                 if not p.pattern in current_patterns:
                     if not p.pattern in a:
                         a.append(p.pattern)
@@ -108,6 +109,7 @@ class Document(models.Model):
 class Pattern(models.Model):
     entity=models.ForeignKey(Entity)
     pattern=models.CharField(max_length=200)
+    enabled=models.BooleanField(default=True)
 
     def __str__(self):
         return self.pattern

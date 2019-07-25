@@ -27,7 +27,7 @@ class Highlighter:
                         entity=Entity.objects.get(id=entity)
                     if entity is not None:
                         words.append(entity.name)
-                    for pattern in entity.pattern_set.all():
+                    for pattern in entity.pattern_set.filter(enabled=True):
                         words.append(pattern.pattern)
                 except:
                     pass
@@ -40,7 +40,8 @@ class Highlighter:
     
     @staticmethod
     def get_word_pattern(text):
-        return re.compile('('+text+')',re.IGNORECASE)
+        # TODO: ignore punctuation
+        return re.compile('('+re.escape(text)+')',re.IGNORECASE)
     
     @staticmethod    
     def highlight_word(text,word,start_tag='<b>',end_tag='</b>'):

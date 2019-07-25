@@ -135,6 +135,11 @@ def process_feed(feed):
     	#	continue
 
 
+def process_entities():
+    for t in EntityType.objects.all():
+        for e in Entity.objects.filter(entity_type=t):
+            Tagger.process_entity(e)
+
 #@task()
 def process_entity(id):
     e=Entity.objects.get(id=id)
