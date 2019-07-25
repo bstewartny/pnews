@@ -78,10 +78,13 @@ def clean_summary(summary):
 
 def strip_html_tags(html):
   # just get appended text elements from HTML
-  try:
-    text="".join(BeautifulSoup(html,convertEntities=BeautifulSoup.HTML_ENTITIES).findAll(text=True))
-    return text
-  except:
-    print('Failed to strip html tags...')
-    return html
+  if not '<' in html:
+      return html
+  #try:
+  return BeautifulSoup(html).get_text()
+  #text="".join(BeautifulSoup(html,convertEntities=BeautifulSoup.HTML_ENTITIES).findAll(text=True))
+  #return text
+  #except:
+  #  print('Failed to strip html tags...')
+  #  return html
 

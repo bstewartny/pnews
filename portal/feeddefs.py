@@ -1,5 +1,22 @@
 #uspecify feeds and wing of feed
 feeds=[
+
+        {'feed':'Reuters Company News',
+            'rss':'http://feeds.reuters.com/reuters/companyNews',
+            'link':'http://feeds.reuters.com/reuters/companyNews'
+	},
+
+        {'feed':'Seeking Alpha Market Currents',
+            'rss':'https://seekingalpha.com/market_currents.xml',
+            'link':'https://seekingalpha.com/news/all'
+	},
+
+
+        {'feed':'Earnings Call Transcripts',
+            'rss':'https://seekingalpha.com/sector/transcripts.xml',
+            'link':'https://seekingalpha.com/earnings/earnings-call-transcripts'
+	},
+
         {'feed':'Vox Day',
 	'rss':'http://voxday.blogspot.com/feeds/posts/default?alt=rss',
 	'link':'https://voxday.blogspot.com',

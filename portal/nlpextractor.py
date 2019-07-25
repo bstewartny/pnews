@@ -7,18 +7,13 @@ invalid_entities=['tweet text',
 
 def extract_entity_names(t):
   entity_names = []
-  #print 'tree: '+str(t)
   if hasattr(t,'label'):
-  #if hasattr(t, 'node') and t.node:
-      #print 't.label='+t.label()
       if t.label() == 'NE':
           entity_names.append(' '.join([child[0] for child in t]))
       else:
           for child in t:
               entity_names.extend(extract_entity_names(child))
-  #print 'found '+str(len(entity_names))+' entities...'           
   return entity_names
-
 
 def is_substr(s,t):
   if len(t)<len(s):
@@ -46,7 +41,6 @@ def filter_entities(a):
   a=[s for s in a if len(s.split())<3]
   # remove any entities that are all CAPS
   a=[s for s in a if not all_caps(s)]
-  #a.sort(lambda x,y:cmp(len(y),len(x)))
   a.sort(key=lambda x:len(x))
   a=[x for x in a if not has_substr(x,a)]
   a=[s for s in a if not s.lower() in invalid_entities]
@@ -58,12 +52,10 @@ def extract_entities(text):
   sentences = nltk.sent_tokenize(text)
   tokenized_sentences = [nltk.word_tokenize(sentence) for sentence in sentences]
   tagged_sentences = [nltk.pos_tag(sentence) for sentence in tokenized_sentences]
-  #chunked_sentences = nltk.batch_ne_chunk(tagged_sentences, binary=True)
   chunked_sentences = nltk.ne_chunk_sents(tagged_sentences, binary=True)
   
   entity_names=[]
   for tree in chunked_sentences:
-    #print 'process sentence...'
     entity_names.extend(extract_entity_names(tree))
 
   return filter_entities(entity_names)

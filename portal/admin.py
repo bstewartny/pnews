@@ -135,9 +135,24 @@ def merge_entities(modeladmin,request,queryset):
     # TODO: how to take the one to merge to?
     # we can just take first one in list, or we can take shortest/longest name?
     if queryset.count()>1:
-        first_one=queryset[0]
-        others=[e for e in queryset if e!=first_one]
-        first_one.merge(others)
+            
+        # lets figure out which one to merge...
+        # if one of them has more than one pattern, or has the most current patterns pick that one
+        # if one of them has either child entities or a parent entity pick that one
+        # otherwise just take the first one
+        best_one=None 
+        for e in queryset:
+            if best_one is None:
+                best_one=e
+            else:
+                if e.pattern_set.count() > best_one.pattern_set.count():
+                    best_one=e
+                if e.parent is not None:
+                    if best_one.parent is None:
+                        best_one=e
+
+        others=[e for e in queryset if e!=best_one]
+        best_one.merge(others)
 
 merge_entities.short_description="Merge selected entities"
 

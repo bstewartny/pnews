@@ -10,6 +10,9 @@ class EntityType(models.Model):
 
     def num_entities(self):
         return Entity.objects.filter(entity_type=self).count()
+    
+    def __str__(self):
+        return self.name
 
 
 class Cluster(models.Model):
@@ -20,6 +23,7 @@ class Entity(models.Model):
     entity_type=models.ForeignKey(EntityType,null=True,blank=True,default=None)
     modified_date=models.DateTimeField(auto_now=True)
     enabled=models.BooleanField(default=True)
+    parent=models.ForeignKey('Entity',null=True,blank=True,default=None)
     slug=models.SlugField()
 
     def save(self,*args,**kwargs):

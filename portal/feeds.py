@@ -183,12 +183,15 @@ def create_id_slug(s):
 
 def strip_html_tags(html):
   # just get appended text elements from HTML
-  try:
-    text="".join(BeautifulSoup(html,convertEntities=BeautifulSoup.HTML_ENTITIES).findAll(text=True))
-    return text
-  except:
-    print('Failed to strip html tags...')
-    return html
+  # if no tags exist just return the text as is
+  if not '<' in html:
+      return html
+  #try:
+  text="".join(BeautifulSoup(html,convertEntities=BeautifulSoup.HTML_ENTITIES).findAll(text=True))
+  return text
+  #except:
+  #  print('Failed to strip html tags...')
+  #  return html
 
 def get_attribute(item,names):
   for name in names:
