@@ -48,7 +48,6 @@ def filter_entities(a):
   return a
 
 def extract_entities(text):
-  print('extract_entities...')
   sentences = nltk.sent_tokenize(text)
   tokenized_sentences = [nltk.word_tokenize(sentence) for sentence in sentences]
   tagged_sentences = [nltk.pos_tag(sentence) for sentence in tokenized_sentences]

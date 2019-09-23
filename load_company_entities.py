@@ -10,7 +10,7 @@ if django.VERSION[1] > 6:
 from portal.models import *
 
 # synonyms we should expand to create variations of company names
-syn_list=[['inc','incorporated'],['ltd','limited'],['corp','corporation'],['comp','company'],['intl','international']]
+syn_list=[['inc','inc.','incorporated'],['ltd','ltd.','limited'],['corp','corp.','corporation'],['comp','company'],['intl','intl.','international']]
 syn_map={}
 
 for syn in syn_list:
