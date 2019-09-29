@@ -97,5 +97,6 @@ class Tagger:
                     count=count+1
             if count>0:
                 print('tagged '+str(count)+' documents for '+entity.name)
-        
+            
+        entity.save()
 

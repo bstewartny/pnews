@@ -75,6 +75,7 @@ def process_doc(doc):
             # and attach to this document
             doc.entities.add(e)
             need_save=True
+            e.save()
 
     # get entities using database models
     entities=Tagger.extract_entities(text)
@@ -90,6 +91,7 @@ def process_doc(doc):
                     doc.entities.add(entity.parent)
                     doc_entity_names.add(entity.parent.name)
                 doc_entity_names.add(entity.name)
+                entity.save()
                 need_save=True
 
     # add entities from feed source
@@ -99,11 +101,13 @@ def process_doc(doc):
             doc.entities.add(e)
             doc_entity_names.add(e.name)
             need_save=True
+            e.save()
         if e.parent is not None:
             if not e.parent.name in doc_entity_names:
                 doc.entities.add(e.parent)
                 doc_entity_names.add(e.parent.name)
                 need_save=True
+                e.save()
     
     if need_save:
         doc.save()

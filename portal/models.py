@@ -19,21 +19,19 @@ class Cluster(models.Model):
     modified_date=models.DateTimeField(auto_now=True)
      
 class Entity(models.Model):
-    name=models.CharField(max_length=200)
-    entity_type=models.ForeignKey(EntityType,null=True,blank=True,default=None)
-    modified_date=models.DateTimeField(auto_now=True)
-    enabled=models.BooleanField(default=True)
-    parent=models.ForeignKey('Entity',null=True,blank=True,default=None)
+    name=models.CharField(max_length=200,db_index=True)
+    entity_type=models.ForeignKey(EntityType,db_index=True,null=True,blank=True,default=None)
+    modified_date=models.DateTimeField(auto_now=True,db_index=True)
+    enabled=models.BooleanField(default=True,db_index=True)
+    parent=models.ForeignKey('Entity',db_index=True,null=True,blank=True,default=None)
+    num_docs=models.IntegerField(db_index=True)
     slug=models.SlugField()
 
     def save(self,*args,**kwargs):
         if not self.id:
-            # TODO: we might need to force self.name to be unicode here...
             self.slug=slugify(str(self.name))
+            self.num_docs=Document.objects.filter(entities=self).count()
         super(Entity,self).save(*args,**kwargs)
-
-    def num_docs(self):
-        return Document.objects.filter(entities=self).count()
 
     def merge(self,others):
         a=[]
@@ -41,13 +39,12 @@ class Entity(models.Model):
         current_patterns=[p.pattern for p in self.pattern_set.filter(enabled=True)]
         for other in others:
             a.append(other.name)
-            for p in other.pattern_set.all(enabled=True):
+            for p in other.pattern_set.filter(enabled=True):
                 if not p.pattern in current_patterns:
                     if not p.pattern in a:
                         a.append(p.pattern)
         for p in a:
             self.pattern_set.add(Pattern(pattern=p,entity=self),bulk=False)
-        self.save()
        
         # update all documents which have other entities to use this entity instead...
         for document in Document.objects.filter(entities__in=others):
@@ -57,6 +54,8 @@ class Entity(models.Model):
 
         for other in others:
             other.delete()
+
+        self.save()
 
     def __str__(self):
         return self.name
