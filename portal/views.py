@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from portal.models import *
 from portal.index import Index
+from portal.index import Zeitgeist
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 import nltk
@@ -16,8 +17,9 @@ def get_entity_list(request):
     # get from request URL (find entity slugs in path)
     entities=[]
     for slug in [s for s in request.path.split('/') if len(s)>0]:
-        entity=get_object_or_404(Entity,slug=slug)
-        entities.append(entity)
+        entity=Entity.objects.filter(enabled=True,slug=slug).order_by('-num_docs').first()
+        if entity:
+            entities.append(entity)
     return entities
 
 def detail(request,entity_id):
@@ -44,6 +46,20 @@ def sources(request):
     results={}
     return render(request,'sources.html',results) 
 
+def zeitgeist(request):
+    # whats going on TODAY:
+        # get top link from drudge
+        # get top entities from most recent feed processing
+        # get entities which have spiked in popularity recently
+        # show entity/word cloud from TODAY (most recent feed processing)
+        # show top articles and entities for the day
+    
+    results=Zeitgeist.get_zeitgeist_facets()
+    return render(request,'zeitgeist.html',{'topics':results}) 
+
+def memes(request):
+    results={}
+    return render(request,'memes.html',results) 
 
 def get_breadcrumbs(entity_list,query):
     breadcrumbs=[]

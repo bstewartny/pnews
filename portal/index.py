@@ -3,6 +3,44 @@ from django.db.models import Count
 from random import randrange
 from portal.highlighter import Highlighter
 from portal.models import *
+from datetime import timedelta
+
+class Zeitgeist:
+
+    @staticmethod
+    def get_zeitgeist_facets():
+        days_back=10
+        # get todays (most recent) 
+        most_recent_date=Document.objects.all().order_by('-modified_date').first().modified_date
+        most_recent_date=most_recent_date.date()
+        most_recent_docs=Document.objects.filter(modified_date__date=most_recent_date)
+        top=5
+        entity_facets=Index.get_field_facets(most_recent_docs,'entities',Entity.objects,top)
+        
+        #for i in range(days_back):
+        #    previous_date=most_recent_date - timedelta(days=1+i)
+        #    previous_docs=Document.objects.filter(modified_date__date=previous_date)
+        #    previous_entity_facets=Index.get_field_facets(previous_docs,'entities',Entity.objects,top)
+             
+            
+        
+        
+        
+        
+        
+        
+        facets= {'entities':entity_facets}
+        page_size=5
+        sort='-pub_date'
+
+        results=None
+        topics=[]
+        for facet in facets['entities']:
+            name=facet['name']
+            slug=facet['slug']
+            topics.append({'name':name,'slug':slug,'results':most_recent_docs.filter(entities=facet['entities']).order_by(sort)[:page_size]})
+        return topics
+         
 
 class Index:
 

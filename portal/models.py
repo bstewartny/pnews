@@ -28,9 +28,11 @@ class Entity(models.Model):
     slug=models.SlugField()
 
     def save(self,*args,**kwargs):
-        if not self.id:
-            self.slug=slugify(str(self.name))
-            self.num_docs=Document.objects.filter(entities=self).count()
+        print('saving entity: '+self.name)
+        self.slug=slugify(str(self.name))
+        print('calculating num_docs...')
+        self.num_docs=Document.objects.filter(entities=self).count()
+        print('num_docs='+str(self.num_docs))
         super(Entity,self).save(*args,**kwargs)
 
     def merge(self,others):
